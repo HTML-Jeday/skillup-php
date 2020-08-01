@@ -1,0 +1,52 @@
+.logo img{
+    width: 200px;
+    height: 100%;
+}
+.logo {
+    height: 100%;
+}
+.nav-wrapper{
+    display: flex;
+    justify-content: space-between;
+}
+input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default):focus:not([readonly]), input[type="password"]:not(.browser-default):focus:not([readonly]), input[type="email"]:not(.browser-default):focus:not([readonly]), input[type="url"]:not(.browser-default):focus:not([readonly]), input[type="time"]:not(.browser-default):focus:not([readonly]), input[type="date"]:not(.browser-default):focus:not([readonly]), input[type="datetime"]:not(.browser-default):focus:not([readonly]), input[type="datetime-local"]:not(.browser-default):focus:not([readonly]), input[type="tel"]:not(.browser-default):focus:not([readonly]), input[type="number"]:not(.browser-default):focus:not([readonly]), input[type="search"]:not(.browser-default):focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]){
+    border-bottom: 1px solid #ffeb3b !important;
+    box-shadow: 0 1px 0 0 #ffeb3b;
+}
+input:not([type]):focus:not([readonly]) + label, input[type="text"]:not(.browser-default):focus:not([readonly]) + label, input[type="password"]:not(.browser-default):focus:not([readonly]) + label, input[type="email"]:not(.browser-default):focus:not([readonly]) + label, input[type="url"]:not(.browser-default):focus:not([readonly]) + label, input[type="time"]:not(.browser-default):focus:not([readonly]) + label, input[type="date"]:not(.browser-default):focus:not([readonly]) + label, input[type="datetime"]:not(.browser-default):focus:not([readonly]) + label, input[type="datetime-local"]:not(.browser-default):focus:not([readonly]) + label, input[type="tel"]:not(.browser-default):focus:not([readonly]) + label, input[type="number"]:not(.browser-default):focus:not([readonly]) + label, input[type="search"]:not(.browser-default):focus:not([readonly]) + label, textarea.materialize-textarea:focus:not([readonly]) + label{
+    color: #ffeb3b;
+}
+.main-btn{
+    padding: 0px 20px;
+    margin: 0;
+    color: #000;
+    margin: 0 !important;
+}
+main{
+    margin-top: 50px;
+}
+.form-column{
+    border-right: 1px solid #ffeb3b;
+}
+.path-input{
+    opacity: 0;
+}
+.btn-field{
+    display: flex;
+}
+.btn-field .btn-small{
+    height: 100%;
+    line-height: 100%;
+    padding: 10px 20px;
+    margin: 10px;
+}
+.input-car{
+    margin: 0;
+}
+td img{
+    width: 200px;
+    height: auto;
+}
+tr td:first-child{
+    width: 300px;
+}
