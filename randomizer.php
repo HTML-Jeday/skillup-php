@@ -2,12 +2,12 @@
   $yourNumber = $_POST['number'];
   function countRand($numb){
       $number = (int) $numb;
-      $rand = rand(0,100);
-      $counter = 1;
-      while($number !== $rand){  
-          $rand = rand(0,100);
-          $counter++;
-      };
+      $counter = 0;
+      do{
+        $rand = rand(0,100);
+        $counter++;
+      }
+      while($number !== $rand);
       return $counter;
   }
 
