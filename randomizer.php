@@ -1,6 +1,7 @@
 <?php
-  function countRand(){
-      $number = (int) $_POST['number'];
+  $yourNumber = $_POST['number'];
+  function countRand($numb){
+      $number = (int) $numb;
       $rand = rand(0,100);
       $counter = 1;
       while($number !== $rand){  
@@ -14,11 +15,11 @@
   //создаём файл
   $file = 'guess.txt';
 
-  $yourNumber = $_POST['number'];
-  $try = countRand();
+  
+  $try = countRand($yourNumber);
 
   $data .= "$yourNumber \n";
-  $data .= "$try\n";
+  $data .= "$try";
 
   // кладём данные в файл
   file_put_contents($file, $data);
