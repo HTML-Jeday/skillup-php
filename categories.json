@@ -1,1 +1,1 @@
-[{"id":"8246b69b6d4fe1d5e940dbc17b168c38","name":"Tablets","order":1},{"id":"a2127224c72eff2583e5eef875747298","name":"Phones","order":3},{"id":"afa510a927ab4432bcb3354b9df1ceb1","name":"Watches","order":2}]
+[{"id":"afa510a927ab4432bcb3354b9df1ceb1","name":"Watches","order":2},{"id":"a2127224c72eff2583e5eef875747298","name":"Phones","order":"3"}]

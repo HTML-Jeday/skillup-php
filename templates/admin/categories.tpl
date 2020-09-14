@@ -1,3 +1,4 @@
+
 {extends file="layout.tpl"}
 
 {block name="body"}
@@ -31,16 +32,26 @@
             <th>ID</th>
             <th>Name</th>
             <th>Order</th>
+            <th>Update</th>
+            <th>Delete</th>
         </tr>
         </thead>
         <tbody>
-           {foreach $categories as $category}
-           <tr>
-                {foreach $category as $item}
-                <td>{$item}</td>
-                {/foreach}
+        {foreach from=$categories item=category}
+            <form action="/?action=adminUpdateCategory" method="POST">
+            <tr>
+
+                    <td>{$category['id']}</td>
+                    <td><input type="text" name="name" value="{$category['name']}"></td>
+                    <td><input type="number" name="order" value="{$category['order']}"></td>
+                    <input type="hidden" name="id" value="{$category['id']}">
+                    <td><input type="submit" class="btn btn-warning" value="Update"></td>
+
+                <td><a href="/?action=adminRemoveCategory&categoryId={$category['id']}" class="btn btn-danger">Delete</a></td>
+            </form>
             </tr>
-            {/foreach}
+        {/foreach}
+
         </tbody>
     </table>
 

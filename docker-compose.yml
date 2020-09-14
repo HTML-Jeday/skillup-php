@@ -2,7 +2,7 @@ version: '3'
 services:
   db:
     image: mysql:5.7
-    container_name: my_mysql
+    container_name: my_mysql1
     environment:
       MYSQL_DATABASE: skillup
       MYSQL_USER: root
@@ -11,7 +11,7 @@ services:
       - "3306:3306"
   php:
     image: webdevops/php:7.4
-    container_name: my_php
+    container_name: my_php1
     environment:
       PHP_UPLOAD_MAX_FILESIZE: 5000M
       PHP_POST_MAX_SIZE: 5000M
@@ -22,7 +22,7 @@ services:
     depends_on:
       - php
     image: webdevops/nginx
-    container_name: my_nginx
+    container_name: my_nginx1
     environment:
       WEB_DOCUMENT_ROOT: /laravel
       WEB_DOCUMENT_INDEX: index.php

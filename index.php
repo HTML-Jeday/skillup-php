@@ -5,6 +5,8 @@ require_once "libs/Smarty.class.php";
 require_once "functions.php";
 require_once "session.php";
 
+checkUserRole();
+
 
 $smarty = new Smarty();
 $smarty->setTemplateDir('templates');
@@ -29,12 +31,27 @@ switch ($action) {
     case "adminUsers":
         adminUsersEndpoint();
         break;
+    case "adminChangeRole":
+        adminChangeRole();
+        break;
+    case "adminDeleteUser":
+        adminDeleteUser();
+        break;
+    case "adminUpdateCategory":
+        adminUpdateCategoryEndpoint();
+        break;
+    case "adminRemoveCategory":
+        adminRemoveCategoryEndpoint();
+        break;
     case "adminCategories":
         adminCategoriesEndpoint();
         break;
     case "adminProducts":
         adminProductsEndpoint();
         break;
+    case "adminAddProduct":
+        adminAddProduct();
+        break;  
     case "adminOrders":
         adminOrdersEndpoint();
         break;
