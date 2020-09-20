@@ -58,6 +58,9 @@ switch ($action) {
     case "cart":
         cartEndpoint();
         break;
+    case 'addToCart':
+        addTocart();
+        break;
     case "orders":
         ordersEndpoint();
         break;

@@ -175,15 +175,10 @@ function mainPageEndpoint()
 {
     global $smarty;
 
-    $arr = readFromFile(CATEGORIES_FILE);
 
-    $sorted = array_orderby($arr, 'order', SORT_DESC);
+    $smarty->assign('categories', getCategoriesList());
 
-    $smarty->assign('categories', $sorted);
-
-    $products = readFromFile(PRODUCTS_FILE);
-
-    $smarty->assign('products', $products);
+    $smarty->assign('products', getProducts());
 
     $smarty->display('index.tpl');
 }
@@ -429,15 +424,9 @@ function adminProductsEndpoint()
     global $smarty;
 
 
-    $arr = readFromFile(CATEGORIES_FILE);
+    $smarty->assign('categories', getCategoriesList());
 
-    $products = readFromFile(PRODUCTS_FILE);
-
-    $sorted = array_orderby($arr, 'order', SORT_DESC);
-
-    $smarty->assign('categories', $sorted);
-
-    $smarty->assign('products', $products);
+    $smarty->assign('products', getProducts());
 
 
     $smarty->display('admin/products.tpl');
@@ -500,6 +489,50 @@ function adminAddProduct()
 
 
 }
+function addToCart()
+{
+
+    $id = $_POST['id'];
+
+    if (strlen($id) !== 32) {
+        die("Wrong product ID $id specified");
+    }
+
+    $products = readFromFile(PRODUCTS_FILE, []);
+
+    $foundProduct = null;
+
+    foreach ($products as $product) {
+        if ($product['id'] === $id) {
+            $foundProduct = $product;
+            break;
+        }
+    }
+
+    if (!$foundProduct) {
+        die("Product with id: $id does not exist");
+    }
+
+    $cartProducts = $_SESSION['cart'] ?? [];
+
+    $cartHasThisProduct = false;
+    foreach ($cartProducts as &$cartProduct) {
+        if ($cartProduct['id'] === $foundProduct['id']) {
+            $cartProduct['count']++;
+            $cartHasThisProduct = true;
+            break;
+        }
+    }
+
+    if (!$cartHasThisProduct) {
+        $foundProduct['count'] = 1;
+        $cartProducts[] = $foundProduct;
+    }
+
+    $_SESSION['cart'] = $cartProducts;
+
+    header("Location: " . $_SERVER['HTTP_REFERER']);
+}
 
 function adminOrdersEndpoint()
 {
@@ -529,4 +562,30 @@ function readFromFile(string $fileName, $default = [])
     $json = file_get_contents($fileName);
 
     return json_decode($json, true);
+}
+
+
+function getProducts(): array
+{
+
+    $categories = getCategoriesList();
+
+    $assocCategories = [];
+
+    foreach ($categories as $category) {
+        $assocCategories[$category['id']] = $category['name'];
+    }
+
+    $products = readFromFile(PRODUCTS_FILE, []);
+  
+
+
+    $updatedProducts = array_map(function ($product) use ($assocCategories) {
+        $product['category_name'] = $assocCategories[$product['category_id']];
+
+        return $product;
+    }, $products);
+
+
+    return $updatedProducts;
 }

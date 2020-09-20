@@ -42,6 +42,7 @@
             <th>ID</th>
             <th>Picture</th>
             <th>Name</th>
+            <th>Category Name</th>
             <th>Price</th>
             <th>Manage</th>
         </tr>
@@ -57,13 +58,14 @@
                 {/if}
                
                 <td>{$product['name']}</td>
+                <td>{$product['category_name']}</td>
                 <td>${$product['price']}</td>
                 <td>
                     <button class="btn btn-warning">Update</button>
                     <button class="btn btn-danger">Delete</button>
                 </td>
             </tr>
-            {{/foreach}}
+            {/foreach}
 
 
         </tbody>

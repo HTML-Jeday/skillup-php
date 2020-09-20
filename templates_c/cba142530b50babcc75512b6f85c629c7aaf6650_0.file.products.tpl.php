@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.34-dev-7, created on 2020-09-14 20:12:58
+/* Smarty version 3.1.34-dev-7, created on 2020-09-20 12:42:09
   from '/laravel/templates/admin/products.tpl' */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.34-dev-7',
-  'unifunc' => 'content_5f5fa49a921217_84473363',
+  'unifunc' => 'content_5f6723f1ede205_80410040',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'cba142530b50babcc75512b6f85c629c7aaf6650' => 
     array (
       0 => '/laravel/templates/admin/products.tpl',
-      1 => 1600103575,
+      1 => 1600594928,
       2 => 'file',
     ),
   ),
@@ -20,23 +20,23 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_5f5fa49a921217_84473363 (Smarty_Internal_Template $_smarty_tpl) {
+function content_5f6723f1ede205_80410040 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_loadInheritance();
 $_smarty_tpl->inheritance->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_6843345285f5fa49a903f57_03682466', "body");
+$_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_6620879725f6723f1ed6bb4_69159398', "body");
 $_smarty_tpl->inheritance->endChild($_smarty_tpl, "layout.tpl");
 }
 /* {block "body"} */
-class Block_6843345285f5fa49a903f57_03682466 extends Smarty_Internal_Block
+class Block_6620879725f6723f1ed6bb4_69159398 extends Smarty_Internal_Block
 {
 public $subBlocks = array (
   'body' => 
   array (
-    0 => 'Block_6843345285f5fa49a903f57_03682466',
+    0 => 'Block_6620879725f6723f1ed6bb4_69159398',
   ),
 );
 public function callBlock(Smarty_Internal_Template $_smarty_tpl) {
@@ -100,6 +100,7 @@ $_smarty_tpl->smarty->ext->_foreach->restore($_smarty_tpl, 1);?>
             <th>ID</th>
             <th>Picture</th>
             <th>Name</th>
+            <th>Category Name</th>
             <th>Price</th>
             <th>Manage</th>
         </tr>
@@ -123,6 +124,8 @@ $_smarty_tpl->tpl_vars['product']->do_else = false;
                
                 <td><?php echo $_smarty_tpl->tpl_vars['product']->value['name'];?>
 </td>
+                <td><?php echo $_smarty_tpl->tpl_vars['product']->value['category_name'];?>
+</td>
                 <td>$<?php echo $_smarty_tpl->tpl_vars['product']->value['price'];?>
 </td>
                 <td>
@@ -130,12 +133,9 @@ $_smarty_tpl->tpl_vars['product']->do_else = false;
                     <button class="btn btn-danger">Delete</button>
                 </td>
             </tr>
-            <?php ob_start();
+            <?php
 }
-$_smarty_tpl->smarty->ext->_foreach->restore($_smarty_tpl, 1);
-$_prefixVariable3 = ob_get_clean();
-echo $_prefixVariable3;?>
-
+$_smarty_tpl->smarty->ext->_foreach->restore($_smarty_tpl, 1);?>
 
 
         </tbody>
