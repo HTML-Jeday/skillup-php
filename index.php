@@ -1,73 +1,84 @@
 <?php
-date_default_timezone_set('Europe/Kiev');
+$action = $_GET['action'];
 
-require_once "libs/Smarty.class.php";
-require_once "functions.php";
-require_once "session.php";
+$db = new mysqli("db", 'root', '', 'skillup');
 
-checkUserRole();
-
-
-$smarty = new Smarty();
-$smarty->setTemplateDir('templates');
-
-$action = $_GET['action'] ?? 'main';
+$query = $db->query("SELECT * FROM users");
+$result = $query->fetch_all(MYSQLI_ASSOC);
 
 
-if (strpos($action, 'admin') === 0) {
-    if (!isset($_SESSION['user']) || $_SESSION['user']['is_admin'] == 0) {
-        $action = 'main';
-    }
-}
 
 switch ($action) {
-    case "login":
-        loginEndpoint();
+    case "fillDB":
+        fillDB();
         break;
-    case "register":
-        registerEndpoint();
-        break;
-    case "admin":
-    case "adminUsers":
-        adminUsersEndpoint();
-        break;
-    case "adminChangeRole":
-        adminChangeRole();
-        break;
-    case "adminDeleteUser":
-        adminDeleteUser();
-        break;
-    case "adminUpdateCategory":
-        adminUpdateCategoryEndpoint();
-        break;
-    case "adminRemoveCategory":
-        adminRemoveCategoryEndpoint();
-        break;
-    case "adminCategories":
-        adminCategoriesEndpoint();
-        break;
-    case "adminProducts":
-        adminProductsEndpoint();
-        break;
-    case "adminAddProduct":
-        adminAddProduct();
-        break;  
-    case "adminOrders":
-        adminOrdersEndpoint();
-        break;
-    case "cart":
-        cartEndpoint();
-        break;
-    case 'addToCart':
-        addTocart();
-        break;
-    case "orders":
-        ordersEndpoint();
-        break;
-    case "logout":
-        logoutEndpoint();
-        break;
-    default:
-        mainPageEndpoint();
+    case "cleanDB":
+        cleanDB();
         break;
 }
+
+
+
+function fillDB(){
+
+
+    global $db;
+//    $count = $db->query("SELECT COUNT(*) FROM users");
+//    $counter = $count->field_count;
+//    echo $counter;
+
+    for ($d = 1; $d <= 500; $d++) {
+        $db->query("INSERT INTO users SET email = 'user{$d}@user.ru', password = 1111");
+    }
+
+
+
+    header('Location: /index.php');
+}
+function cleanDB(){
+
+    global $db;
+    $db->query("DELETE FROM users");
+
+    header('Location: /index.php');
+}
+
+?>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <title>DB</title>
+</head>
+<body>
+    <div class="container">
+        <a href="?action=fillDB" class="btn btn-success">Сидирование</a>
+        <a href="?action=cleanDB" class="btn btn-danger">Очитска БД</a>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">email</th>
+            </tr>
+            </thead>
+            <tbody>
+                <?php
+                $html = '';
+                foreach ($result as $item) {
+                    $html .= '<tr>';
+                    $html .= "<td>{$item['id']}</td>";
+                    $html .= "<td>{$item['email']}</td>";
+
+                    $html .= '</tr>';
+                }
+                echo $html;
+                ?>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
