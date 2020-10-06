@@ -23,9 +23,6 @@ function fillDB(){
 
 
     global $db;
-    $count = $db->query("SELECT COUNT(*) FROM users");
-    $counter = $count->field_count;
-    echo $counter;
 
     for ($d = 1; $d <= 500; $d++) {
         $db->query("INSERT INTO users SET `email` = 'user{$d}@user.ru', `password` = 1111");

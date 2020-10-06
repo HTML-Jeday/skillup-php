@@ -27,6 +27,7 @@
     <property name="DatabaseDriversLRU" value="mysql" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="database.data.extractors.current.export.id" value="Comma-separated (CSV)_id" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="reference.webide.settings.project.settings.php" />
@@ -46,7 +47,7 @@
       <workItem from="1601566168724" duration="644000" />
       <workItem from="1601803292613" duration="4743000" />
       <workItem from="1601895623402" duration="7203000" />
-      <workItem from="1601971496931" duration="17055000" />
+      <workItem from="1601971496931" duration="17405000" />
     </task>
     <servers />
   </component>
@@ -54,14 +55,18 @@
     <option name="version" value="3" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="734" y="193" width="800" height="684" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1601486004652">
+    <state x="734" y="193" width="800" height="684" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1601988877953">
       <screen x="72" y="27" width="1848" height="948" />
     </state>
-    <state x="734" y="193" width="800" height="684" key="#com.intellij.execution.impl.EditConfigurationsDialog/72.27.1848.948@72.27.1848.948" timestamp="1601486004652" />
+    <state x="734" y="193" width="800" height="684" key="#com.intellij.execution.impl.EditConfigurationsDialog/72.27.1848.948@72.27.1848.948" timestamp="1601988877953" />
     <state width="254" height="195" key="DatabaseViewActions_Filter" timestamp="1601485987437">
       <screen x="72" y="27" width="1848" height="948" />
     </state>
     <state width="254" height="195" key="DatabaseViewActions_Filter/72.27.1848.948@72.27.1848.948" timestamp="1601485987437" />
+    <state x="774" y="262" width="424" height="491" key="FileChooserDialogImpl" timestamp="1601988959984">
+      <screen x="72" y="27" width="1848" height="948" />
+    </state>
+    <state x="774" y="262" width="424" height="491" key="FileChooserDialogImpl/72.27.1848.948@72.27.1848.948" timestamp="1601988959984" />
     <state width="1531" height="459" key="GridCell.Tab.0.bottom" timestamp="1601988632834">
       <screen x="72" y="27" width="1848" height="948" />
     </state>
