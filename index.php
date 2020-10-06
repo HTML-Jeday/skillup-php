@@ -23,18 +23,18 @@ function fillDB(){
 
 
     global $db;
-//    $count = $db->query("SELECT COUNT(*) FROM users");
-//    $counter = $count->field_count;
-//    echo $counter;
+    $count = $db->query("SELECT COUNT(*) FROM users");
+    $counter = $count->field_count;
+    echo $counter;
 
-//    for ($d = 1; $d <= 500; $d++) {
-//        $db->query("INSERT INTO users SET `email` = 'user{$d}@user.ru', `password` = 1111");
-//    }
-//
-//    for ($d = 1; $d <= 500; $d++) {
-//        $randNumber = rand(1000, 5000);
-//        $db->query("INSERT INTO products SET `product_name` = 'Iphone{$d}', `price` = '{$randNumber}'");
-//    }
+    for ($d = 1; $d <= 500; $d++) {
+        $db->query("INSERT INTO users SET `email` = 'user{$d}@user.ru', `password` = 1111");
+    }
+
+    for ($d = 1; $d <= 500; $d++) {
+        $randNumber = rand(1000, 5000);
+        $db->query("INSERT INTO products SET `product_name` = 'Iphone{$d}', `price` = '{$randNumber}'");
+    }
    $users = $db->query("SELECT * FROM users limit 100");
    $users_ar = [];
     foreach($users as $user){
