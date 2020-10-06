@@ -24,14 +24,17 @@ function fillDB(){
 
     global $db;
 
+    // cоздание пользователей
     for ($d = 1; $d <= 500; $d++) {
         $db->query("INSERT INTO users SET `email` = 'user{$d}@user.ru', `password` = 1111");
     }
-
+    // создание товаров
     for ($d = 1; $d <= 500; $d++) {
         $randNumber = rand(1000, 5000);
         $db->query("INSERT INTO products SET `product_name` = 'Iphone{$d}', `price` = '{$randNumber}'");
     }
+
+    // жалкие попытки создать  200-800 заказов что бы created_at варировалось с 2020-06-01 по 2020-08-31 (надо так что бы выбрало случаным образом 100 юзеров и случаным обращом создало заказ от 1 до 8 для каждого пользователя)
    $users = $db->query("SELECT * FROM users limit 100");
    $users_ar = [];
     foreach($users as $user){
@@ -55,10 +58,12 @@ function fillDB(){
 
     header('Location: /index.php');
 }
+
+
 function cleanDB(){
 
     global $db;
-    $db->query("DELETE FROM users, products, orders");
+    $db->query("DELETE FROM users, products, orders, totals1");
 
     header('Location: /index.php');
 }
@@ -112,7 +117,7 @@ function printDatesTable(){
     }
     return $html;
 }
-// создал результирующую таблицу покупок каждого пользователя
+// создал результирующую таблицу покупок каждого пользователя , не понял как по другому вывести общую сумму для кадого пользователя
 # CREATE TABLE totals1 AS SELECT email, SUM(price) as SUM
 # FROM orders as o, users as u, products as p
 # WHERE u.id = o.user_id
