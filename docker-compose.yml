@@ -2,10 +2,11 @@ version: '3'
 services:
   db:
     image: mysql:5.7
-    container_name: my_mysql1
+    container_name: my_mysql2
     environment:
       MYSQL_DATABASE: skillup
       MYSQL_USER: root
+      MYSQL_PASSWORD: "root"
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     ports:
       - "3306:3306"

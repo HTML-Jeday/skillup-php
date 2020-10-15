@@ -24,36 +24,110 @@ function fillDB(){
 
     global $db;
 
-    // cоздание пользователей
+//     cоздание пользователей
+    $setUsers = "INSERT INTO users (email, password) VALUES ";
+    $arrUsers = [];
     for ($d = 1; $d <= 500; $d++) {
-        $db->query("INSERT INTO users SET `email` = 'user{$d}@user.ru', `password` = 1111");
+        $arrUsers[] = "('user{$d}@user.ru', 1111)";
     }
-    // создание товаров
+    $query = $setUsers . implode("," , $arrUsers);
+//    $db->query($query);
+
+//     создание товаров
+    $setProducts = "INSERT INTO products (product_name, price) VALUES ";
+    $arrProducts = [];
     for ($d = 1; $d <= 500; $d++) {
-        $randNumber = rand(1000, 5000);
-        $db->query("INSERT INTO products SET `product_name` = 'Iphone{$d}', `price` = '{$randNumber}'");
+        $arrProducts[] = "('Iphone{$d}', '".rand(1000, 5000)."')";
     }
+    $query = $setProducts . implode("," , $arrProducts);
+//    $db->query($query);
 
-    // жалкие попытки создать  200-800 заказов что бы created_at варировалось с 2020-06-01 по 2020-08-31 (надо так что бы выбрало случаным образом 100 юзеров и случаным обращом создало заказ от 1 до 8 для каждого пользователя)
-   $users = $db->query("SELECT * FROM users limit 100");
-   $users_ar = [];
-    foreach($users as $user){
-        $users_ar[] = $user['id'];
-    }
-    $products = $db->query("SELECT * FROM products limit 100");
-    $products_ar = [];
-    foreach($products as $product){
-        $products_ar[] = $product['id'];
-    }
 
-    for ($d = 1; $d <= 200; $d++) {
-        for($i = 0; $i <= count($users_ar); $i++){
-            for($r = 1; $r < rand(1, 8); $r++){
-                $productRand = rand(0, count($products_ar));
-                $db->query("INSERT INTO orders SET `product_id` = $products_ar[$productRand], `user_id` = $users_ar[$i] ");
+   $users = $db->query("SELECT id FROM users ORDER BY RAND() limit 100;")->fetch_all(MYSQLI_ASSOC);
+   $users = array_map(function ($array) {
+        return $array['id'];
+    }, $users);
+
+
+    $products = $db->query("SELECT id FROM products ORDER BY RAND() LIMIT 900;")->fetch_all(MYSQLI_ASSOC);
+    $products = array_map(function ($array) {
+        return $array['id'];
+    }, $products);
+
+
+    $orders = [];
+
+    $setOrders = "INSERT INTO orders (user_id, created_at) VALUES ";
+
+    foreach ($users as $user) {
+            $ordersCount = rand(1, 8);
+            for ($i = 0; $i < $ordersCount; $i++) {
+                $orders[] = "($user, '". date("Y-m-d H:i:s", rand(1590969600, 1598918399))."')";
             }
+    }
+
+
+//    $db->query($setOrders . implode(",",$orders));
+
+
+    $orderIds = $db->query("SELECT user_id FROM orders")->fetch_all(MYSQLI_ASSOC);
+
+
+    $orderIds = array_map(function ($array) {
+        return $array['user_id'];
+    }, $orderIds);
+
+    $productMaxIndex = count($products) - 1;
+
+    $orderQuery = "INSERT INTO order_items (order_id, item_id, `count`, price) VALUES ";
+    $orderItems = [];
+
+    foreach ($orderIds as $orderId) {
+        $productsInOrder = rand(1,3);
+        for ($i = 0; $i < $productsInOrder; $i++) {
+            $orderItems[] = "($orderId, " . $products[rand(0, $productMaxIndex)] . ", " . rand(1,3) . ", " . (rand(1000, 100000) / 100) . ")";
         }
-  }
+    }
+//  echo $orderQuery . implode(",", $orderItems);
+//    $db->query($orderQuery . implode(",", $orderItems));
+
+//заполнение погоды
+    $dates = [];
+    $days = [];
+    $times = [];
+    $temperatures = [];
+    $data = [];
+
+    //генирируем данные
+    for($i=0;$i<500;$i++) {
+        $dates[] = date("Y-m-d,H:i", time() - rand(1, 31499600));
+        $temperatures[] = rand(10,20) . '.' . rand(0,10);
+    }
+    // бьём время и дату на массивы
+    foreach ($dates as $date){
+        $arr = explode(',',$date);
+        $days[]= $arr[0];
+        $times[] = $arr[1];
+    }
+
+    //готовый массив данных для запроса
+    for($i=0;$i<500;$i++) {
+        $data[] = "('$days[$i]', '$times[$i]', $temperatures[$i])";
+
+    }
+
+
+    $dataSet = "INSERT INTO weather (date, time, temperature) VALUES ";
+    $db->query($dataSet . implode(",", $data));
+
+
+
+    // запрос на AVG по месяцам
+    $query = "SELECT date, time, temperature, AVG(temperature),month(date) AS m
+                FROM weather
+                WHERE time LIKE '12%'
+                GROUP BY m";
+
 
 
     header('Location: /index.php');
@@ -63,7 +137,17 @@ function fillDB(){
 function cleanDB(){
 
     global $db;
-    $db->query("DELETE FROM users, products, orders, totals1");
+
+    $deleteOrderItems = "DELETE FROM order_items";
+    $deleteOrders = "DELETE FROM orders";
+    $deleteProducts = "DELETE FROM products";
+    $deleteUsers = "DELETE FROM users";
+
+    $db->query($deleteOrderItems);
+    $db->query($deleteOrders);
+    $db->query($deleteProducts);
+    $db->query($deleteUsers);
+
 
     header('Location: /index.php');
 }
@@ -87,12 +171,24 @@ function printUser(){
 
 function printTopProducts(){
     global $db;
-    $topProducts = $db->query("SELECT id, product_name FROM products AS p LEFT JOIN orders AS o ON p.id = o.product_id GROUP BY product_id HAVING COUNT(*) > 1 ORDER BY COUNT(*) DESC LIMIT 3");
+    $query = 'SELECT
+                item_id, p.id, p.product_name, SUM(count) as c
+            FROM
+                 order_items as oi, products as p
+            WHERE
+                  p.id = oi.item_id
+            GROUP
+                BY item_id, p.id, count
+            ORDER
+                BY c DESC
+            LIMIT 3;';
+
+    $topProducts = $db->query($query);
 
     $html = '';
     foreach ($topProducts as $item) {
         $html .= '<tr>';
-        $html .= "<td>1</td>";
+        $html .= "<td>{$item['item_id']}</td>";
         $html .= "<td>{$item['product_name']}</td>";
 
         $html .= '</tr>';
@@ -104,9 +200,19 @@ function printTopProducts(){
 
 
 
+
 function printDatesTable(){
     global $db;
-    $dates = $db->query("SELECT DISTINCT id, email, o.created_at FROM users AS u LEFT JOIN orders AS o ON u.id = o.user_id WHERE o.created_at BETWEEN '2020-10-05' AND '2020-10-06' LIMIT 10");
+    $query = "SELECT DISTINCT
+                   u.id , u.email, o.user_id, o.created_at
+            FROM
+                 users as u, orders as o
+            WHERE o.created_at
+                BETWEEN'2020-06-30' AND '2020-08-31'
+            ORDER BY RAND()
+            LIMIT 10";
+
+    $dates = $db->query($query);
 
     $html = '';
     foreach ($dates as $item) {
@@ -117,22 +223,30 @@ function printDatesTable(){
     }
     return $html;
 }
-// создал результирующую таблицу покупок каждого пользователя , не понял как по другому вывести общую сумму для кадого пользователя
-# CREATE TABLE totals1 AS SELECT email, SUM(price) as SUM
-# FROM orders as o, users as u, products as p
-# WHERE u.id = o.user_id
-# GROUP BY user_id, product_id
+
 
 
 function totalSpendMoney(){
     global $db;
-    $total = $db->query("SELECT SUM(SUM) as sum, email FROM totals1 GROUP BY email ORDER BY sum DESC LIMIT 10");
+    $query = "SELECT oi.order_id, o.user_id, oi.price, u.email, SUM(oi.count * price) as total
+                FROM
+                     order_items as oi, orders as o, users as u
+                WHERE
+                      oi.order_id = o.user_id AND
+                      oi.order_id = u.id
+                GROUP BY
+                         oi.order_id
+                ORDER BY
+                         total DESC
+                LIMIT 10";
+    $total = $db->query($query);
+
 
     $html = '';
     foreach ($total as $item) {
         $html .= '<tr>';
         $html .= "<td>{$item['email']}</td>";
-        $html .= "<td>{$item['sum']}$</td>";
+        $html .= "<td>{$item['total']}$</td>";
         $html .= '</tr>';
     }
     return $html;
@@ -164,9 +278,9 @@ totalSpendMoney();
             </tr>
             </thead>
             <tbody>
-            <?php
-                echo printUser();
-            ?>
+<!--            --><?php
+//                echo printUser();
+//            ?>
             </tbody>
         </table>
         <table class="table">
@@ -177,9 +291,9 @@ totalSpendMoney();
             </tr>
             </thead>
             <tbody>
-            <?php
-                echo printTopProducts();
-            ?>
+<!--            --><?php
+//                echo printTopProducts();
+//            ?>
             </tbody>
         </table>
         <table class="table">
@@ -190,9 +304,9 @@ totalSpendMoney();
             </tr>
             </thead>
             <tbody>
-            <?php
-                echo printDatesTable();
-            ?>
+<!--            --><?php
+//                echo printDatesTable();
+//            ?>
             </tbody>
         </table>
         <table class="table">
@@ -203,9 +317,9 @@ totalSpendMoney();
             </tr>
             </thead>
             <tbody>
-            <?php
-            echo totalSpendMoney();
-            ?>
+<!--            --><?php
+//            echo totalSpendMoney();
+//            ?>
             </tbody>
         </table>
 
