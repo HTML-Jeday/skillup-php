@@ -1,8 +1,4 @@
 <?php
-ini_set('error_reporting', E_ALL);
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-
 
 class DB
 {
@@ -13,7 +9,6 @@ class DB
 
     public static function getInstance(){
         if (!self::$db) {
-            echo "ESTABLISH CONNECTION...<br>";
             self::$db = new mysqli(
                 'db',
                 'root',
@@ -22,36 +17,36 @@ class DB
             );
         }
 
-        echo "READ FROM EXISTING VARIABLE<br>";
         return self::$db;
     }
 }
 
-class User extends DB{
+class Phone extends DB{
+    function __construct(){
 
-    private $name;
-    private $password;
-
-    public function __construct(){
+    }
+    function call($to){
         $this->getInstance();
-    }
-    public function createUser(string $name, int $psw){
-        $this->name = $name;
-        $this->password = $psw;
-        self::$db->query("INSERT INTO users (email, password) VALUES('$name', $psw);");
-    }
-    public function deleteUser(){
-        self::$db->query("DELETE FROM users WHERE `email` = '$this->name';");
-    }
-    public function updateUser($name, $psw){
-        self::$db->query("UPDATE users SET `email` = '$name', `password` = $psw WHERE `email` = '$this->name';");
-    }
-    public function getUser(){
-        $res = self::$db->query("SELECT * FROM users WHERE `email` = '$this->name';");
-        return $res->fetch_all(MYSQLI_ASSOC);
+        $query = 'INSERT INTO calls (`from`, `to`) VALUE ('.$this->number.' ,'.$to->number.') ';
+        self::$db->query($query);
     }
 }
 
-$newUser = new User();
-$newUser->createUser('Vasya', 123);
+class User extends Phone{
+    public $number;
+    public $name;
+    function __construct(string $name, int $number){
+        $this->name = $name;
+        $this->number = $number;
+    }
+
+}
+
+$user1 = new User('Vasya', 123);
+$user2 = new User('Petya', 321);
+$user3 = new User('Member', 333);
+
+$user1->call($user2);
+$user2->call($user3);
 ?>
+
