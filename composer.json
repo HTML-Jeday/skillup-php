@@ -1,0 +1,16 @@
+{
+    "name": "serhii/docker",
+    "require": {
+        "smarty/smarty": "^3.1"
+    },
+    "require-dev": {
+        "phpoffice/phpexcel": "^1.8"
+    },
+    "authors": [
+        {
+            "name": "Serhii",
+            "email": "admiin@admin.ru"
+        }
+    ],
+    "minimum-stability": "stable"
+}
