@@ -79,6 +79,10 @@ class PostModel
         $session = Session::init();
         $user = $session->get('user');
         
+        if($user == null ){
+            die('You are not logged in');
+        }
+        
         $this->setAuthor($user['email']);
         
         $db = DB::getInstance();
